@@ -297,8 +297,8 @@ class ADLibrary_Api_Authentication extends Zikula_Api_AbstractAuthentication
      *                         otherwise false if user not found or error.
      */
     public function getUidForAuthenticationInfo(array $args)
-    {	
-		return (int)ModUtil::apiFunc($this->name, 'ActiveDirectoryUser', 'get_uid', $args['authentication_info']['login_id']);
+    {
+		return ModUtil::apiFunc($this->name, 'ActiveDirectoryUser', 'get_ad_id', $args['authentication_info']['login_id']);
     }
 
     /**
@@ -324,7 +324,10 @@ class ADLibrary_Api_Authentication extends Zikula_Api_AbstractAuthentication
      */
     public function authenticateUser(array $args)
     {
-		return (int)ModUtil::apiFunc($this->name, 'ActiveDirectoryUser', 'get_uid', $args['authentication_info']['login_id']); 
+		$authResult = ModUtil::apiFunc($this->name, 'ActiveDirectoryUser', 'authenticate', $args['authentication_info']); 
+		if ($authResult) {
+			// the user has succesfully authenticated against AD - now what!
+		} else return false;
     }
     
     /**

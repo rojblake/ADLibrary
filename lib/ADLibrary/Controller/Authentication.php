@@ -164,35 +164,27 @@ class ADLibrary_Controller_Authentication extends Zikula_Controller_AbstractAuth
 
         $authenticationMethod = isset($args['authenticationMethod']) ? $args['authenticationMethod'] : array();
         $authenticationInfo   = isset($args['authenticationInfo']) ? $args['authenticationInfo'] : array();
-
         if (!is_array($authenticationMethod) || empty($authenticationMethod) || !isset($authenticationMethod['modname'])) {
             throw new Zikula_Exception_Fatal($this->__('The authentication module name was not specified during an attempt to validate user authentication information.'));
-        } elseif ($authenticationMethod['modname'] != 'Users') {
+        } elseif ($authenticationMethod['modname'] != 'ADLibrary') {
             throw new Zikula_Exception_Fatal($this->__f('Attempt to validate authentication information with incorrect authentication module. Credentials should be validated with the \'%1$s\' module instead.', array($authenticationMethod['modname'])));
         }
-
         if (!isset($authenticationMethod['method'])) {
             throw new Zikula_Exception_Fatal($this->__('The authentication method name was not specified during an attempt to validate user authentication information.'));
-        } elseif (($authenticationMethod['method'] != 'uname') && ($authenticationMethod['method'] != 'email')) {
+        } elseif (($authenticationMethod['method'] != 'ActiveDirectory')) {
             throw new Zikula_Exception_Fatal($this->__f('Unknown authentication method (\'%1$s\') while attempting to validate user authentication information in the Users module.', array($authenticationMethod['method'])));
         }
-
         if (!is_array($authenticationInfo) || empty($authenticationInfo) || !isset($authenticationInfo['login_id'])
                 || !is_string($authenticationInfo['login_id'])
                 ) {
             // This is an internal error that the user cannot recover from, and should not happen (it is an exceptional situation).
-            if ($authenticationMethod['method'] == 'uname') {
-                throw new Zikula_Exception_Fatal($this->__('A user name was not specified, or the user name provided was invalid.'));
-            } else {
-                throw new Zikula_Exception_Fatal($this->__('An e-mail address was not specified, or the e-mail address provided was invalid.'));
-            }
+			throw new Zikula_Exception_Fatal($this->__('A user name was not specified, or the user name provided was invalid.'));
         }
 
         if (!isset($authenticationInfo['pass']) || !is_string($authenticationInfo['pass'])) {
             // This is an internal error that the user cannot recover from, and should not happen (it is an exceptional situation).
             throw new Zikula_Exception_Fatal($this->__('A password was not specified, or the password provided was invalid.'));
         }
-
         // No need to be too fancy or too specific here. If the login id (the uname or email) is not empty, then that's sufficient.
         // If we are too specific here, then we are giving a potential hacker too much information about how the authentication process
         // works and what is expected. Just validate it enough so that a lookup can be performed.

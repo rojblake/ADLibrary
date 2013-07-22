@@ -12,7 +12,6 @@ class ADLibrary_Api_ActiveDirectoryUser extends Zikula_AbstractApi
 		$this->adLDAP = ModUtil::apiFunc($this->name, 'user', 'bindLDAP');
 	}
    
-   
 	public function get_ad_id($login_id)
 	{
 		$user = $this->adLDAP->user()->info($login_id, array('cn'));
@@ -35,5 +34,13 @@ class ADLibrary_Api_ActiveDirectoryUser extends Zikula_AbstractApi
 		$this->entityManager->flush();	
 		
 		return true;
+	}
+
+	public function authenticate($args)
+	{
+		if (!isset($args['login_id']) || !isset($args['pass'])) {
+			return false;
+		}
+		return $this->adLDAP->user()->authenticate($args['login_id'], $args['pass']);
 	}
 }
