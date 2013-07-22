@@ -15,27 +15,5 @@
  */
 class ADLibrary_Controller_User extends Zikula_AbstractController
 {
-    public function main()
-    {
-		$settings = ModUtil::getVar($this->name);
-		
-		// check if our login type is enabled
-        if (!isset($settings['isenabled'])) {
-            throw new Zikula_Exception_Fatal($this->__('Active Directory login is not supported'));
-		}
-
-		return $this->view->fetch('adlibrary_user_main.tpl');
-	}
-
-    public function login()
-    {
-        // we shouldn't get here if logged in already....
-        $this->redirectIf(UserUtil::isLoggedIn(), ModUtil::url($this->name, 'user', 'main'));
-
-        $loggedIn = false;
-        $isFunctionCall = false;
-        $isReentry = false;
-
-	}
 }
 

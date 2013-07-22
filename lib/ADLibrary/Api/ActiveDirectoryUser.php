@@ -12,75 +12,23 @@ class ADLibrary_Api_ActiveDirectoryUser extends Zikula_AbstractApi
 		$this->adLDAP = ModUtil::apiFunc($this->name, 'user', 'bindLDAP');
 	}
    
-	public function getId()
-	{
-		echo 'got here 1'; die;
-		$fb_id = $this->facebook->getUser();
-
-		if ($fb_id) {
-			try {
-				$user_profile = $this->facebook->api('/me');		  	
-			} catch (FacebookApiException $e) {
-				$fb_id = null;
-			}
-		}
-
-		return $fb_id;			
-	}   
-   	
-	public function getPermissions()
-	{
-		echo 'got here 2'; die;
-
-		return $this->facebook->api("/me/permissions");  
-	}
    
-	public function getMe()
+	public function get_ad_id($login_id)
 	{
-		echo 'got here 3'; die;
-
-	return $this->facebook->api('/me');   
+		$user = $this->adLDAP->user()->info($login_id, array('cn'));
+		return $user[0]['cn'][0]; 
 	}
 
-	public function getEmail()
+	public function set_ad_id($args = false)
 	{
-		echo 'got here 4'; die;
-
-		return $this->facebook->api('/me/email');   
-	}
-
-	public function getAvatar()
-	{
-		echo 'got here 5'; die;
-
-		return $this->facebook->api('/me');   
-	}
-
-	public function getPages()
-	{
-		echo 'got here 5'; die;
-
-		return $this->facebook->api('/me/accounts');	
-	}
-   
-	public function get_uid($login_id)
-	{
-		$user = $this->adLDAP->user()->info($login_id, array('uidNumber'));
-		return $user[0]['uidnumber'][0]; 
-	}
-
-	public function set_zuid($args = false)
-	{
-		echo 'got here 7'; die;
-
-		$connection = new FConnect_Entity_Connections();
+		$connection = new ADLibrary_Entity_Connections();
 		
-		$connection->setFb_id($args['fb_id']);
+		$connection->setad_id($args['ad_id']);
 		
-		if (is_numeric($args['z_uid'])){
-		$connection->setUser_id($args['z_uid']);	
-		}else{
-		$connection->setUser_id(UserUtil::getVar('uid'));	
+		if (is_numeric($args['ad_id'])){
+			$connection->setUser_id($args['ad_id']);	
+		} else {
+			$connection->setUser_id(UserUtil::getVar('uid'));	
 		}
 		
 		$this->entityManager->persist($connection);
