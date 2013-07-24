@@ -52,12 +52,6 @@ class ADLibrary_Installer extends Zikula_AbstractInstaller
      */
     function uninstall()
     {
-        try {
-            DoctrineHelper::dropSchema($this->entityManager, $this->_entities);
-        } catch (Exception $e) {
-          return LogUtil::registerError($e->getMessage());  
-        }
-
         $this->delVars();
 
         // Deletion successful
