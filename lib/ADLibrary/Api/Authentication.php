@@ -114,7 +114,18 @@ class ADLibrary_Api_Authentication extends Zikula_Api_AbstractAuthentication
     }
 
     /**
-     * Retrieves an array of authentication methods defined by this module, no filter for enabled as there is only one method.
+     * Retrieves an array of authentication methods defined by this module, possibly filtered by only those that are enabled.
+     *
+     * Parameters passed in $args:
+     * ---------------------------
+     * integer $args['filter'] Either {@link FILTER_ENABLED} (value 1), {@link FILTER_NONE} (value 0), or not present; allows the result to be filtered.
+     *                              If this argument is FILTER_ENABLED, then only those authentication methods that are also enabled are returned.
+     *
+     * @param array $args All arguments passed to this function.
+     *
+     * @return array An array containing the authentication methods defined by this module, possibly filtered by only those that are enabled.
+     *
+     * @throws Zikula_Exception_Fatal Thrown if invalid parameters are sent in $args.
      */
     public function getAuthenticationMethods(array $args = null)
     {
