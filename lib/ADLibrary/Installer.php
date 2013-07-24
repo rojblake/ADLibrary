@@ -25,11 +25,6 @@ class ADLibrary_Installer extends Zikula_AbstractInstaller
      */
     function install()
     {
-        try {
-            DoctrineHelper::createSchema($this->entityManager, $this->_entities);
-        } catch (Exception $e) {
-            return LogUtil::registerError($e->getMessage());
-        }
         // Initialization successful
         return true;
     }
