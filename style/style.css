@@ -1,22 +1,11 @@
-
-div.authentication_select_method_bigbutton #authentication_select_method_adlibrary_ad {
-    background-image: url("../images/facebook-medium.png");
-    display:inline-block;
-    height:22px;
-    padding:43px 5px 5px 5px;
+div.authentication_select_method_bigbutton #authentication_select_method_submit_adlibrary_activedirectory {
+    background-image: url("../images/medium/microsoftad.png");
 }
 
-div.authentication_select_method_bigbutton #authentication_select_method_adlibrary_ad:hover {
-    background-image: url("../images/facebook-medium.png");
-    display:inline-block;
-    height:22px;
-    padding:41px 3px 3px 3px;
+div.authentication_select_method_smallbutton #authentication_select_method_submit_adlibrary_activedirectory {
+    background-image: url("../images/small/microsoftad.png");
 }
 
-div.authentication_select_method_smallbutton {
-    background-image: url("../images/facebook-small.png");
-}
-
-div#users_loginblock_authentication_method_selectors {
-    background-image: url("../images/facebook-extrasmall.png");
+div#users_loginblock_authentication_method_selectors #authentication_select_method_form_adlibrary_activedirectory {
+    background: transparent url("../images/extrasmall/microsoftad.png") no-repeat scroll center left;
 }

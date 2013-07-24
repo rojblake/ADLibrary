@@ -1,5 +1,5 @@
+{img modname='ADLibrary' src='large/microsoftad.png' width='100px' __title='Active Directory Account' __alt='Active Directory Account'}
 <div id="users_login_fields">
-    <strong>{img modname='ADLibrary' src='small/microsoftad.png'}</strong>
     <div class="z-formrow">
         <label for="adlibrary_login_id">{gt text='Username'}</label>
         <input id="adlibrary_login_id" name="authentication_info[login_id]" type="text" maxlength="255" value="" />

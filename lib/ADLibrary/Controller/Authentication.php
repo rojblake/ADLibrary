@@ -76,7 +76,16 @@ class ADLibrary_Controller_Authentication extends Zikula_Controller_AbstractAuth
         }
         // End parameter extraction and error checking	
 
-		
+        if ($this->authenticationMethodIsEnabled($args['method'])) {
+            $templateName = 'adlibrary_auth_loginformfields_' . mb_strtolower("{$args['form_type']}.tpl");
+            if (!$this->view->template_exists($templateName)) {
+				throw new Zikula_Exception_Fatal($this->__f('A form fields template (%1$s) was not found for the %2$s method using form type \'%3$s\'.', array($templateName, $args['method'], $args['form_type'])));
+            }
+
+            return $this->view->assign('authentication_method', $args['method'])
+                              ->fetch($templateName);
+        }
+
 		return $this->view->assign('authentication_method', $args['method'])
 						  ->fetch('adlibrary_auth_loginformfields.tpl');
     }
@@ -103,7 +112,7 @@ class ADLibrary_Controller_Authentication extends Zikula_Controller_AbstractAuth
     {
         // Parameter extraction and error checking
         if (!isset($args) || !is_array($args)) {
-            throw new Zikula_Exception_Fatal($this->__('The an invalid \'$args\' parameter was received.'));
+            throw new Zikula_Exception_Fatal($this->__('Error: an invalid \'$args\' parameter was received.'));
         }
 
         if (isset($args['form_type']) && is_string($args['form_type'])) {
@@ -121,14 +130,14 @@ class ADLibrary_Controller_Authentication extends Zikula_Controller_AbstractAuth
         }
         // End parameter extraction and error checking
 
-        if ($this->authenticationMethodIsEnabled($args['method'])) {
+        if ($this->authenticationMethodIsEnabled($method)) {
             $templateVars = array(
                 'authentication_method' => array(
                     'modname'   => $this->name,
-                    'method'    => $args['method'],
+                    'method'    => $method,
                 ),
                 'is_selected'           => isset($args['is_selected']) && $args['is_selected'],
-                'form_type'             => $args['form_type'],
+                'form_type'             => $formType,
                 'form_action'           => $args['form_action'],
             );
 
