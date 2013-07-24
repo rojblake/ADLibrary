@@ -337,7 +337,34 @@ class ADLibrary_Api_Authentication extends Zikula_Api_AbstractAuthentication
     {
 		$authResult = ModUtil::apiFunc($this->name, 'ActiveDirectoryUser', 'authenticate', $args['authentication_info']); 
 		if ($authResult) {
-			// the user has succesfully authenticated against AD - now what!
+			// the user has succesfully authenticated against AD/
+			// from here we break the zikula spec as we want to automagically create a zikula user
+			// our user variables are 
+			// $args['authentication_info']['login_id'] = AD cn
+			// $args['authentication_info']['pass'] = AD password
+
+			$eMail = ModUtil::apiFunc($this->name, 'ActiveDirectoryUser', 'get_ad_email', $args['authentication_info']['login_id']); 
+
+			// check if we already have a user registered already
+			$userInfo = ModUtil::apiFunc('Users', 'user', 'get', array('uname' => $args['authentication_info']['login_id']));
+			
+			// create a local user and get it's ID
+			if (!$userInfo) {
+				$newUser = ModUtil::apiFunc('Users', 
+										 'registration', 
+										 'registerNewUser', 
+										 array('reginfo' => array(
+													'uname' 		=> $args['authentication_info']['login_id'],
+													'pass' 			=> $args['authentication_info']['pass'],
+													'passreminder' 	=> __('Generated from active directory'),
+													'email' 		=> $eMail,
+											   
+										 )));
+				$zuid = $newUser['uid'];
+			} else {
+				$zuid = $userInfo['uid'];
+			}
+			return $zuid;
 		} else return false;
     }
     

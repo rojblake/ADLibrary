@@ -18,6 +18,12 @@ class ADLibrary_Api_ActiveDirectoryUser extends Zikula_AbstractApi
 		return $user[0]['cn'][0]; 
 	}
 
+	public function get_ad_email($login_id)
+	{
+		$user = $this->adLDAP->user()->info($login_id, array('mail'));
+		return $user[0]['mail'][0]; 
+	}
+
 	public function set_ad_id($args = false)
 	{
 		$connection = new ADLibrary_Entity_Connections();
